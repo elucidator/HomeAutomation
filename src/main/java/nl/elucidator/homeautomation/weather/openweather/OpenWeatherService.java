@@ -13,14 +13,18 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
 /**
- * Created by pieter on 1/28/14.
+ * Stateless interface for retrieving Weather data.
  */
 @Stateless
 public class OpenWeatherService {
 
+    /**
+     * Location ID of amsterdam ZO, NL
+     */
+    public static final String AMSTERDAM_ZO = "6544881";
+
     private static final String BASE_URL = "http://api.openweathermap.org/data/2.5/weather";
     private static final String LOCATION_ID = "id";
-    public static final String AMSTERDAM_ZO = "6544881";
     private static final String APP_ID = "12df61dae56f7f403f954209817eae3f";
     private static final String PARAM_APP_ID = "APPID";
     private static final String UNITS_METRIC = "metric";
@@ -28,7 +32,7 @@ public class OpenWeatherService {
     private static final Logger LOGGER = LogManager.getLogger(OpenWeatherService.class);
 
     @Inject
-    private OpenWeatherGsonService gsonService;
+    OpenWeatherGsonService gsonService;
 
     public Weather getWeather(final String locationId) {
         Client client = ClientBuilder.newClient();

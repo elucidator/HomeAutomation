@@ -6,23 +6,25 @@ import java.util.List;
 import java.util.Stack;
 
 /**
- * Created by pieter on 1/9/14.
+ * Collector for data recieved by the Rest interface.
  */
 @ApplicationScoped
 public class DataCollector {
-    private List<String> dataRows = new Stack<String>();
+    private List<String> dataRows = new Stack<>();
 
+    /**
+     * Add data to the collection.
+     *
+     * @param dataRow Data
+     * @return true when input equals "!"
+     */
     public boolean add(String dataRow) {
         dataRows.add(dataRow);
         return dataRow.equals("!");
     }
 
-    public void reset() {
-        dataRows.clear();
-    }
-
     public List<String> getData() {
-        List<String> result= new ArrayList<>(dataRows);
+        List<String> result = new ArrayList<>(dataRows);
         dataRows.clear();
         return result;
     }

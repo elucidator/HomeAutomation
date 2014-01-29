@@ -9,13 +9,12 @@ import java.math.BigDecimal;
 import java.util.List;
 
 /**
- * Created by pieter on 1/15/14.
+ Collection of data conform specs DMSR 4.0
  */
 public class DMSRData {
 
+    private static final Gson gson;
     private ElectricityData electricityData;
-    private List<GasData> gasDataList;
-
     private String header;
     private List<GasData> gasData;
     private DateTime timeStamp;
@@ -27,16 +26,18 @@ public class DMSRData {
 
     }
 
+    static {
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(DateTime.class, new DateTimeConverter());
+        gson = gsonBuilder.create();
+    }
+
     public void setElectricityData(ElectricityData electricityData) {
         this.electricityData = electricityData;
     }
 
     public ElectricityData getElectricityData() {
         return electricityData;
-    }
-
-    public List<GasData> getGasDataList() {
-        return gasDataList;
     }
 
     public String getHeader() {
@@ -56,10 +57,7 @@ public class DMSRData {
     }
 
     public String gson() {
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.registerTypeAdapter(DateTime.class, new DateTimeConverter());
-        Gson gson = gsonBuilder.create();
-      return gson.toJson(this);
+        return gson.toJson(this);
     }
 
     public void setTimeStamp(DateTime timeStamp) {
