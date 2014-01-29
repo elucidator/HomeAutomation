@@ -11,6 +11,18 @@
         <maven.compiler.target>1.7</maven.compiler.target>
         <failOnMissingWebXml>false</failOnMissingWebXml>
     </properties>
+    <contributors>
+        <contributor>
+            <name>Pieter van der Meer</name>
+            <email>pieter@elucidator.nl</email>
+        </contributor>
+    </contributors>
+
+    <licenses>
+        <license>
+
+        </license>
+    </licenses>
 
 
     <dependencies>
