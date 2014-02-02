@@ -2,7 +2,7 @@ package nl.elucidator.homeautomation.energy.powermeter.rest;
 
 import nl.elucidator.homeautomation.energy.powermeter.collector.DataCollector;
 import nl.elucidator.homeautomation.energy.powermeter.data.DMSRData;
-import nl.elucidator.homeautomation.energy.powermeter.elastic.ElasticClient;
+import nl.elucidator.homeautomation.energy.powermeter.elastic.PowerMeterElasticClient;
 import nl.elucidator.homeautomation.energy.powermeter.processor.DMSRDataProcessor;
 import nl.elucidator.homeautomation.weather.openweather.timed.TimedWeatherInfo;
 import org.apache.logging.log4j.LogManager;
@@ -27,7 +27,7 @@ public class PowerMeter {
     @Inject
     private DataCollector collector;
     @Inject
-    private ElasticClient elasticClient;
+    private PowerMeterElasticClient powerMeterElasticClient;
     @Inject
     private DMSRDataProcessor processor = new DMSRDataProcessor();
     @Inject
@@ -49,7 +49,7 @@ public class PowerMeter {
         if (collector.add(encodedString)) {
             DMSRData dmsrData = processor.process(collector.getData());
             String gsonData = dmsrData.gson();
-            elasticClient.add(gsonData);
+            powerMeterElasticClient.add(gsonData);
             GSON_LOGGER.info(gsonData);
 
         }

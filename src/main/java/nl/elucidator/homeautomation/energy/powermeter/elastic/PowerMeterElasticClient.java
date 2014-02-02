@@ -5,7 +5,7 @@ import nl.elucidator.homeautomation.elastic.AbstractElasticClient;
 import javax.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
-public class ElasticClient extends AbstractElasticClient {
+public class PowerMeterElasticClient extends AbstractElasticClient {
 
     private static final String INDEX = "smartmeter";
     private static final String TYPE = "record";

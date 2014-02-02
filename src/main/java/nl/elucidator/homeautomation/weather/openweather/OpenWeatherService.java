@@ -7,8 +7,11 @@ import org.apache.logging.log4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.ws.rs.ProcessingException;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.ResponseProcessingException;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
@@ -35,13 +38,24 @@ public class OpenWeatherService {
     OpenWeatherGsonService gsonService;
 
     public Weather getWeather(final String locationId) {
-        Client client = ClientBuilder.newClient();
-        WebTarget base = client.target(BASE_URL).queryParam(LOCATION_ID, locationId).queryParam(PARAM_UNITS, UNITS_METRIC).queryParam(PARAM_APP_ID, APP_ID);
-        String response = base.request(MediaType.APPLICATION_JSON_TYPE).get(String.class);
-        Weather weather = gsonService.fromJson(response, Weather.class);
-        LOGGER.info("Retrieved Weather, temperature: " + weather.getMain().getTemp());
-        return weather;
+        try {
+            Client client = ClientBuilder.newClient();
+            WebTarget base = client.target(BASE_URL).queryParam(LOCATION_ID, locationId)./*queryParam(PARAM_UNITS, UNITS_METRIC).*/queryParam(PARAM_APP_ID, APP_ID);
+            String response = base.request(MediaType.APPLICATION_JSON_TYPE).get(String.class);
+            Weather weather = gsonService.fromJson(response, Weather.class);
+            LOGGER.info("Retrieved Weather, temperature: " + weather.getMain().getTemp());
+            return weather;
+        } catch (ResponseProcessingException e) {
+            LOGGER.error(e);
+        } catch (ProcessingException e) {
+            LOGGER.error(e);
+        } catch (WebApplicationException e) {
+            LOGGER.error(e);
+        } catch (Exception e) {
+            LOGGER.fatal("Something is really wrong here??", e);
+        }
 
+        return null;
     }
 
 }

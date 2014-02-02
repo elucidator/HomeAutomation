@@ -1,19 +1,16 @@
 package nl.elucidator.homeautomation.weather.openweather.timed;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import nl.elucidator.homeautomation.weather.openweather.OpenWeatherService;
 import nl.elucidator.homeautomation.weather.openweather.elastic.OpenWeatherElasticClient;
-import nl.elucidator.homeautomation.weather.openweather.gson.OpenWeatherDateTimeConverter;
 import nl.elucidator.homeautomation.weather.openweather.gson.OpenWeatherGsonService;
 import nl.elucidator.homeautomation.weather.openweather.model.Weather;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.joda.time.DateTime;
 
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
+import javax.ejb.Timeout;
 import javax.inject.Inject;
 
 
@@ -32,10 +29,25 @@ public class TimedWeatherInfo {
 
     private static final Logger LOGGER = LogManager.getLogger(TimedWeatherInfo.class);
 
+    @Timeout
+    public void timeout() {
+        LOGGER.error("Timeout completing weather request.");
+    }
+
 
     @Schedule(minute = "*/10", hour = "*", persistent = false)
     public void doWork() {
-        Weather weather = weatherService.getWeather(OpenWeatherService.AMSTERDAM_ZO);
-        elasticClient.add(gsonService.toJsonTimeStamped(weather, "dt", "timeStamp"));
+
+        try {
+            Weather weather = weatherService.getWeather(OpenWeatherService.AMSTERDAM_ZO);
+
+            if (weather != null) {
+                elasticClient.add(gsonService.toJsonTimeStamped(weather, "dt", "timeStamp"));
+            } else {
+                LOGGER.error("No data received from weather service.");
+            }
+        } catch (Exception e) {
+            LOGGER.error("Error during processing of the Scheduled task.", e);
+        }
     }
 }

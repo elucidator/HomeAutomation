@@ -33,4 +33,8 @@ public abstract class AbstractElasticClient {
         IndexResponse indexResponse = client.prepareIndex(getIndex(), getType()).setSource(data).execute().actionGet();
         return indexResponse.getId();
     }
+
+    public Client getClient() {
+        return client;
+    }
 }
