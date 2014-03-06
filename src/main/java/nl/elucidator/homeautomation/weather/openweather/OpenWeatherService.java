@@ -1,5 +1,6 @@
 package nl.elucidator.homeautomation.weather.openweather;
 
+import nl.elucidator.homeautomation.configuration.NamedProperty;
 import nl.elucidator.homeautomation.weather.openweather.gson.OpenWeatherGsonService;
 import nl.elucidator.homeautomation.weather.openweather.model.Weather;
 import org.apache.logging.log4j.LogManager;
@@ -7,13 +8,14 @@ import org.apache.logging.log4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.ws.rs.ProcessingException;
-import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.ServerErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.ResponseProcessingException;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Link;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 /**
  * Stateless interface for retrieving Weather data.
@@ -21,17 +23,20 @@ import javax.ws.rs.core.MediaType;
 @Stateless
 public class OpenWeatherService {
 
-    /**
-     * Location ID of amsterdam ZO, NL
-     */
-    public static final String AMSTERDAM_ZO = "6544881";
+    @Inject
+    @NamedProperty(key = "openweather.url", defaultValue = "http://api.openweathermap.org/data/2.5/weather")
+    String baseUrl;
+    @Inject
+    @NamedProperty(key = "openweather.applicationId", mandatory = true)
+    String appId;
+    @Inject
+    @NamedProperty(key = "openweather.units", defaultValue = "metric")
+    String units;
 
-    private static final String BASE_URL = "http://api.openweathermap.org/data/2.5/weather";
-    private static final String LOCATION_ID = "id";
-    private static final String APP_ID = "12df61dae56f7f403f954209817eae3f";
+    private static final String PARAM_LOCATION_ID = "id";
     private static final String PARAM_APP_ID = "APPID";
-    private static final String UNITS_METRIC = "metric";
     private static final String PARAM_UNITS = "units";
+
     private static final Logger LOGGER = LogManager.getLogger(OpenWeatherService.class);
 
     @Inject
@@ -39,20 +44,23 @@ public class OpenWeatherService {
 
     public Weather getWeather(final String locationId) {
         try {
+            LOGGER.info("Retrieving weather for location: " + locationId);
             Client client = ClientBuilder.newClient();
-            WebTarget base = client.target(BASE_URL).queryParam(LOCATION_ID, locationId)./*queryParam(PARAM_UNITS, UNITS_METRIC).*/queryParam(PARAM_APP_ID, APP_ID);
+            WebTarget base = client.target(baseUrl).queryParam(PARAM_LOCATION_ID, locationId).queryParam(PARAM_UNITS, units).queryParam(PARAM_APP_ID, appId);
             String response = base.request(MediaType.APPLICATION_JSON_TYPE).get(String.class);
             Weather weather = gsonService.fromJson(response, Weather.class);
-            LOGGER.info("Retrieved Weather, temperature: " + weather.getMain().getTemp());
+            LOGGER.trace("Retrieved Weather, temperature: " + weather.getMain().getTemp());
             return weather;
         } catch (ResponseProcessingException e) {
             LOGGER.error(e);
-        } catch (ProcessingException e) {
-            LOGGER.error(e);
-        } catch (WebApplicationException e) {
-            LOGGER.error(e);
+        } catch (ServerErrorException e) {
+            Response.StatusType statusType = e.getResponse().getStatusInfo();
+            LOGGER.error("Call resulted in error: Family: " + statusType.getFamily() + " Code: " + statusType.getStatusCode() + " Phrase: " + statusType.getReasonPhrase());
+            for (Link link : e.getResponse().getLinks()) {
+                LOGGER.error("Link: " + link.toString());
+            }
         } catch (Exception e) {
-            LOGGER.fatal("Something is really wrong here??", e);
+            LOGGER.error("Unknown error: " + e.getCause() + " \"" + e.getClass().getSimpleName() + "\"", e);
         }
 
         return null;

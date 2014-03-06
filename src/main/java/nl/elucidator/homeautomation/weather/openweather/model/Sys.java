@@ -1,10 +1,8 @@
 
 package nl.elucidator.homeautomation.weather.openweather.model;
 
-import javax.annotation.Generated;
 import com.google.gson.annotations.Expose;
 
-@Generated("com.googlecode.jsonschema2pojo")
 public class Sys {
 
     @Expose

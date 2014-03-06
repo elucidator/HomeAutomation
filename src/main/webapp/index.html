@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>AngularJS on JAX-RS</title>
-    <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css"/>
+    <title>Home Automation, Dataminer</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 </head>
 <body ng-app="TodoApp" ng-controller="TodoCtrl">
 
@@ -17,28 +17,9 @@
     </article>
 </section>
 
-<div id="edit-note-modal" class="modal fade" tabindex="-1" role="dialog" ng-class="{'in show':isEditNoteMode()}">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Add note</h4>
-            </div>
-            <div class="modal-body">
-                <form id="edit-note-form" ng-submit="save()">
-                    <input type="text" ng-model="selectedNote.title" placeholder="Title" class="form-control" required/>
-                    <textarea ng-model="selectedNote.summary" placeholder="Summary" class="form-control" required></textarea>
-                    <button class="btn btn-primary" type="submit">Save</button>
-                    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
 
 </body>
-<script src="vendor/angular/angular.js"></script>
-<script src="vendor/angular/angular-mocks.js"></script>
-<script src="vendor/angular/angular-resource.js"></script>
-<script src="api-settings.jsp"></script>
-<script src="app/_app.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular-resource.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 </html>

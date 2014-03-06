@@ -1,24 +1,22 @@
 
 package nl.elucidator.homeautomation.weather.openweather.model;
 
-import javax.annotation.Generated;
 import com.google.gson.annotations.Expose;
 
-@Generated("com.googlecode.jsonschema2pojo")
 public class Clouds {
 
     @Expose
-    private Integer all;
+    private Double all;
 
-    public Integer getAll() {
+    public Double getAll() {
         return all;
     }
 
-    public void setAll(Integer all) {
+    public void setAll(Double all) {
         this.all = all;
     }
 
-    public Clouds withAll(Integer all) {
+    public Clouds withAll(Double all) {
         this.all = all;
         return this;
     }

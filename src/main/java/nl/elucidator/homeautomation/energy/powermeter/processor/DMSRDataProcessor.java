@@ -87,7 +87,6 @@ public class DMSRDataProcessor {
 
     private List<GasData> parseGasData(List<String> data) {
 
-
         List<String> gasMeterPrefixes = findGasMeterPrefixes(data);
 
         ArrayList<GasData> gasDataList = new ArrayList<>();

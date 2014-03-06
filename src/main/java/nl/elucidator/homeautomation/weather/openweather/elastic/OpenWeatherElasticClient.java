@@ -2,13 +2,14 @@ package nl.elucidator.homeautomation.weather.openweather.elastic;
 
 import nl.elucidator.homeautomation.elastic.AbstractElasticClient;
 
-import javax.inject.Singleton;
+import javax.ejb.Stateless;
 
-@Singleton
+@Stateless
 public class OpenWeatherElasticClient extends AbstractElasticClient {
 
     private static final String INDEX = "smartmeter";
     private static final String TYPE = "weather";
+
 
     @Override
     public String getIndex() {

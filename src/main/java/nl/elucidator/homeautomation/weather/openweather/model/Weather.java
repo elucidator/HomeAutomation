@@ -1,15 +1,14 @@
 
 package nl.elucidator.homeautomation.weather.openweather.model;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.annotation.Generated;
-import javax.validation.Valid;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import org.joda.time.DateTime;
 
-@Generated("com.googlecode.jsonschema2pojo")
+import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
+
 public class Weather {
 
     @Expose()

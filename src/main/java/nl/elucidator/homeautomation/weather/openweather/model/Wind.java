@@ -1,16 +1,14 @@
 
 package nl.elucidator.homeautomation.weather.openweather.model;
 
-import javax.annotation.Generated;
 import com.google.gson.annotations.Expose;
 
-@Generated("com.googlecode.jsonschema2pojo")
 public class Wind {
 
     @Expose
     private Double speed;
     @Expose
-    private Integer deg;
+    private Double deg;
 
     public Double getSpeed() {
         return speed;
@@ -25,15 +23,15 @@ public class Wind {
         return this;
     }
 
-    public Integer getDeg() {
+    public Double getDeg() {
         return deg;
     }
 
-    public void setDeg(Integer deg) {
+    public void setDeg(Double deg) {
         this.deg = deg;
     }
 
-    public Wind withDeg(Integer deg) {
+    public Wind withDeg(Double deg) {
         this.deg = deg;
         return this;
     }

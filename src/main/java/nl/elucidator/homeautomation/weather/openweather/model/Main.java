@@ -1,22 +1,20 @@
 
 package nl.elucidator.homeautomation.weather.openweather.model;
 
-import javax.annotation.Generated;
 import com.google.gson.annotations.Expose;
 
-@Generated("com.googlecode.jsonschema2pojo")
 public class Main {
 
     @Expose
     private Double temp;
     @Expose
-    private Integer pressure;
+    private Double pressure;
     @Expose
     private Double temp_min;
     @Expose
     private Double temp_max;
     @Expose
-    private Integer humidity;
+    private Double humidity;
 
     public Double getTemp() {
         return temp;
@@ -31,15 +29,15 @@ public class Main {
         return this;
     }
 
-    public Integer getPressure() {
+    public Double getPressure() {
         return pressure;
     }
 
-    public void setPressure(Integer pressure) {
+    public void setPressure(Double pressure) {
         this.pressure = pressure;
     }
 
-    public Main withPressure(Integer pressure) {
+    public Main withPressure(Double pressure) {
         this.pressure = pressure;
         return this;
     }
@@ -70,15 +68,15 @@ public class Main {
         return this;
     }
 
-    public Integer getHumidity() {
+    public Double getHumidity() {
         return humidity;
     }
 
-    public void setHumidity(Integer humidity) {
+    public void setHumidity(Double humidity) {
         this.humidity = humidity;
     }
 
-    public Main withHumidity(Integer humidity) {
+    public Main withHumidity(Double humidity) {
         this.humidity = humidity;
         return this;
     }
