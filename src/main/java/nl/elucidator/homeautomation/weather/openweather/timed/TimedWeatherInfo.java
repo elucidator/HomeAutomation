@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 
 
 /**
- * Created by pieter on 1/28/14.
+ * Retrieve weather information in a time fashion
  */
 @Singleton
 public class TimedWeatherInfo {
@@ -39,7 +39,6 @@ public class TimedWeatherInfo {
     private ManagedScheduledExecutorService defaultScheduledExecutorService;
 
     private static final Logger LOGGER = LogManager.getLogger(TimedWeatherInfo.class);
-    private static Weather lastWeather;
 
     @Timeout
     public void timeout() {
@@ -47,7 +46,7 @@ public class TimedWeatherInfo {
     }
 
 
-    @Schedule(minute = "*/10", hour = "*", persistent = true)
+    @Schedule(minute = "*/1", hour = "*", persistent = true)
     public void scheduleFuture() {
 
         defaultScheduledExecutorService.schedule(new Callable<Object>() {
@@ -59,22 +58,14 @@ public class TimedWeatherInfo {
                     if (weather != null) {
                         weather.setTimeStamp(DateTime.now());
                         elasticClient.add(gsonService.toJsonTimeStamped(weather, "dt", "timeStamp"));
-                        lastWeather = weather;
                     } else {
-                        if (lastWeather == null) {
-                            LOGGER.error("No data available from weather service.");
-                        } else {
-                            lastWeather.setTimeStamp(DateTime.now());
-                            elasticClient.add(gsonService.toJsonTimeStamped(lastWeather, "dt", "timeStamp"));
-                            LOGGER.warn("Inserted old weather data, temperature: " + lastWeather.getMain().getTemp() + " timeStamp: " + weather.getTimeStamp());
-                        }
+                        LOGGER.error("No data available from weather service.");
                     }
                 } catch (Exception e) {
                     LOGGER.error("Error during processing of the Scheduled task.", e);
-                } finally {
-                    return null;
                 }
 
+                return null;
             }
         }, 0, TimeUnit.SECONDS);
     }

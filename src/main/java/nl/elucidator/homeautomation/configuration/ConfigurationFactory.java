@@ -4,49 +4,73 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
 /**
- * Created by pieter on 3/5/14.
+ * Factory for providing configuration from a properties file
  */
 @Startup
 @Singleton
-public class Configuration {
+public class ConfigurationFactory {
 
     private static final String APPLICATION_PROPERTIES = "application.properties";
     private Properties configData;
-    private static final Logger LOGGER = LogManager.getLogger(Configuration.class);
+    private static final Logger LOGGER = LogManager.getLogger(ConfigurationFactory.class);
 
+
+    @Resource(name = "applicationConfiguration")
+    Object applicationConfiguration;
 
     @PostConstruct
     public void fetchConfiguration() {
 
         LOGGER.info("Loading configuration");
-        String fileName = APPLICATION_PROPERTIES;
         try {
+            if (applicationConfiguration != null) {
+                configData = loadPropertiesFromFile((String) applicationConfiguration);
+                return;
+            }
             configData =
-                    loadPropertiesFromClasspath(fileName);
+                    loadDefault();
         } catch (IOException e) {
             LOGGER.error("Error loading properties. " + e.getMessage());
         }
     }
 
+    private Properties loadPropertiesFromFile(final String applicationConfiguration) {
+        LOGGER.info("Loading properties from JNDI defined location: " + applicationConfiguration);
+        Properties properties = new Properties();
+
+        try (InputStream in = new FileInputStream(applicationConfiguration)) {
+            properties.load(in);
+        } catch (FileNotFoundException e) {
+            LOGGER.error("Unable to read configuration file. (" + applicationConfiguration + ") -> " + e.getMessage());
+        } catch (IOException e) {
+            LOGGER.error("Error during read of configuration file (" + applicationConfiguration + ") -> " + e.getMessage());
+        }
+
+        return properties;
+    }
+
     /**
      * Load properties file from classpath with Java 7 :-)
      *
-     * @param fileName
      * @return properties
      */
-    private Properties loadPropertiesFromClasspath(String fileName) throws IOException {
+    private Properties loadDefault() throws IOException {
+        LOGGER.info("Loading default properties from classpath " + APPLICATION_PROPERTIES);
         Properties properties = new Properties();
         try (InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(
-                fileName)) {
+                APPLICATION_PROPERTIES)) {
             if (in != null) {
                 properties.load(in);
             }
@@ -62,13 +86,12 @@ public class Configuration {
     /**
      * Get a String property, named by the annotation {{@link nl.elucidator.homeautomation.configuration.NamedProperty}}
      *
-     * @param point
+     * @param point injection point
      * @return String
      */
-    public
     @Produces
     @NamedProperty
-    String getString(final InjectionPoint point) {
+    public String getString(final InjectionPoint point) {
         LOGGER.trace("Loading string for a String property " + point);
         String key = getKey(point);
         String propertyValue = configData.getProperty(key);

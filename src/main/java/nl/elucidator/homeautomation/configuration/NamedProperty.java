@@ -10,23 +10,24 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Created by pieter on 3/5/14.
+ * Annotation for Properties that are injected by the CDI container
  */
 @Retention(RUNTIME)
 @Target({FIELD, METHOD})
 @Qualifier
 public @interface NamedProperty {
     /**
-     * Bundle key
+     * key or name of the property
      *
-     * @return a valid bundle key or ""
+     * @return a valid key or ""
      */
     @Nonbinding String key() default "";
 
     /**
-     * Is it a mandatory property
+     * Is it a mandatory property. When key is not found in the configuration it
+     * throws a {{@link java.lang.IllegalArgumentException}}
      *
-     * @return true if mandator
+     * @return true if mandatory
      */
     @Nonbinding boolean mandatory() default false;
 
