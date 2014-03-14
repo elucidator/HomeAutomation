@@ -1,0 +1,49 @@
+{
+    "size": 0,
+    "facets": {
+        "0": {
+            "date_histogram": {
+                "key_field": "timeStamp",
+                "value_field": "electricityData.actualPower",
+                "interval": "1h"
+            },
+            "facet_filter": {
+                "query": {
+                    "filtered": {
+                        "query": {
+                            "query_string": {
+                                "query": "*"
+                            }
+                        },
+                        "filter": {
+                            "bool": {
+                                "must": [
+                                    {
+                                        "match_all": { }
+                                    },
+                                    {
+                                        "range": {
+                                            "range": {
+                                                "from": 1394725347925,
+                                                "to": "now",
+                                                "include_lower": true,
+                                                "include_upper": true
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "bool": {
+                                            "must": {
+                                                "match_all": { }
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

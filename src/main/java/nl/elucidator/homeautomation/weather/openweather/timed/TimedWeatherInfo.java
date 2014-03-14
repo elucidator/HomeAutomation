@@ -46,7 +46,7 @@ public class TimedWeatherInfo {
     }
 
 
-    @Schedule(minute = "*/1", hour = "*", persistent = true)
+    @Schedule(minute = "*/10", hour = "*", persistent = true)
     public void scheduleFuture() {
 
         defaultScheduledExecutorService.schedule(new Callable<Object>() {
