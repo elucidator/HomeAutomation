@@ -8,9 +8,10 @@
 
     <loggers>
 
+        <logger name="nl.elucidator.homeautomation.elastic.data" level="TRACE"/>
 
         <root level="TRACE">
-            <appender-ref ref="Console" level="info"/>
+            <appender-ref ref="Console" level="TRACE"/>
         </root>
     </loggers>
 </configuration>

@@ -1,14 +1,12 @@
-package nl.elucidator.homeautomation.energy.powermeter.elastic;
-
-import nl.elucidator.homeautomation.elastic.AbstractElasticClient;
+package nl.elucidator.homeautomation.elastic.client;
 
 import javax.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
-public class PowerMeterElasticClient extends AbstractElasticClient {
+public class OpenWeatherElasticClient extends AbstractElasticClient {
 
     private static final String INDEX = "smartmeter";
-    private static final String TYPE = "record";
+    private static final String TYPE = "weather";
 
     @Override
     public String getIndex() {
@@ -19,4 +17,5 @@ public class PowerMeterElasticClient extends AbstractElasticClient {
     public String getType() {
         return TYPE;
     }
+
 }

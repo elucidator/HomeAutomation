@@ -1,8 +1,8 @@
 package nl.elucidator.homeautomation.energy.powermeter.rest;
 
+import nl.elucidator.homeautomation.elastic.client.PowerMeterElasticClient;
 import nl.elucidator.homeautomation.energy.powermeter.collector.DataCollector;
 import nl.elucidator.homeautomation.energy.powermeter.data.DMSRData;
-import nl.elucidator.homeautomation.energy.powermeter.elastic.PowerMeterElasticClient;
 import nl.elucidator.homeautomation.energy.powermeter.processor.DMSRDataProcessor;
 import nl.elucidator.homeautomation.weather.openweather.timed.TimedWeatherInfo;
 import org.apache.logging.log4j.LogManager;

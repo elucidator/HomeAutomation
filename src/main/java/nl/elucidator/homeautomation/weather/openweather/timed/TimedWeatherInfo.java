@@ -1,8 +1,8 @@
 package nl.elucidator.homeautomation.weather.openweather.timed;
 
 import nl.elucidator.homeautomation.configuration.NamedProperty;
+import nl.elucidator.homeautomation.elastic.client.OpenWeatherElasticClient;
 import nl.elucidator.homeautomation.weather.openweather.OpenWeatherService;
-import nl.elucidator.homeautomation.weather.openweather.elastic.OpenWeatherElasticClient;
 import nl.elucidator.homeautomation.weather.openweather.gson.OpenWeatherGsonService;
 import nl.elucidator.homeautomation.weather.openweather.model.Weather;
 import org.apache.logging.log4j.LogManager;
@@ -57,6 +57,7 @@ public class TimedWeatherInfo {
 
                     if (weather != null) {
                         weather.setTimeStamp(DateTime.now());
+
                         elasticClient.add(gsonService.toJsonTimeStamped(weather, "dt", "timeStamp"));
                     } else {
                         LOGGER.error("No data available from weather service.");

@@ -1,4 +1,4 @@
-package nl.elucidator.homeautomation.elastic;
+package nl.elucidator.homeautomation.elastic.client;
 
 import nl.elucidator.homeautomation.configuration.NamedProperty;
 import org.elasticsearch.client.Client;
@@ -11,7 +11,7 @@ import javax.inject.Inject;
 /**
  * Created by pieter on 3/5/14.
  */
-public class ElasticClientProducder {
+public class ElasticClientProducer {
 
     @Inject
     @NamedProperty(key = "elastic.host")
@@ -20,8 +20,12 @@ public class ElasticClientProducder {
     @NamedProperty(key = "elastic.port")
     private int port;
 
+
     @Produces
-    public Client createElasticClient() {
-        return new TransportClient().addTransportAddress(new InetSocketTransportAddress(host, port));
+    public Client produceCLient() {
+        TransportClient transportClient = new TransportClient().addTransportAddress(new InetSocketTransportAddress(host, port));
+
+        return transportClient;
     }
+
 }

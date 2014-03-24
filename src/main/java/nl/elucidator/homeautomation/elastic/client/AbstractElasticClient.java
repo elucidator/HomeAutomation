@@ -1,4 +1,4 @@
-package nl.elucidator.homeautomation.elastic;
+package nl.elucidator.homeautomation.elastic.client;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,6 +33,10 @@ public abstract class AbstractElasticClient {
         client.prepareIndex(getIndex(), getType()).setSource(data).execute(new ClientActionListener());
         GSON_LOGGER.info(data);
         return "Ok";
+    }
+
+    public Client getClient() {
+        return client;
     }
 
     private class ClientActionListener implements ActionListener<IndexResponse> {

@@ -1,7 +1,5 @@
 package nl.elucidator.homeautomation.energy.powermeter.data;
 
-import java.math.BigDecimal;
-
 /**
  * Created by pieter on 1/22/14.
  */
@@ -17,6 +15,10 @@ public class ElectricityData {
     private int actualPowerRecieved;
     private int actualTreshHold;
     private SwitchPosition switchPosition;
+
+    public ElectricityData() {
+        super();
+    }
 
     public void setEquipmentId(String equipmentId) {
         this.equipmentId = equipmentId;
@@ -102,6 +104,6 @@ public class ElectricityData {
         String value = kwh.substring(0, kwh.indexOf("*"));
         Double valKwh = new Double(value);
 
-        return (int)(valKwh * new Double(KWH));
+        return (int) (valKwh * new Double(KWH));
     }
 }
